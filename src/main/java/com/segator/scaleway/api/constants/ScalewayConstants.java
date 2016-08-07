@@ -12,7 +12,7 @@ import java.net.URL;
  * @author isaac_000
  */
 public class ScalewayConstants {
-    public static final String accountURL = "https://api.scaleway.com";
+    public static final String accountURL = "https://account.scaleway.com";
     public static final String computeURL = "https://api.scaleway.com";
     
     public static final String HEADER_AUTH_TOKEN="X-Auth-Token";

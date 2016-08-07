@@ -9,24 +9,37 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.segator.scaleway.api.entity.exceptions.ScalewayInvalidRequestException;
 import com.jcabi.manifests.Manifests;
 import com.segator.scaleway.api.constants.ScalewayConstants;
-import com.segator.scaleway.api.entity.ScalewayServerTemplate;
+import com.segator.scaleway.api.entity.ScalewayCommercialType;
 import com.segator.scaleway.api.entity.ScalewayImage;
 import com.segator.scaleway.api.entity.ScalewayImageResponse;
 import com.segator.scaleway.api.entity.ScalewayImagesResponse;
+import com.segator.scaleway.api.entity.ScalewayOrganization;
+import com.segator.scaleway.api.entity.ScalewayOrganizationsInstances;
 import com.segator.scaleway.api.entity.ScalewayServer;
 import com.segator.scaleway.api.entity.ScalewayServerAction;
 import com.segator.scaleway.api.entity.ScalewayServerActionRequest;
 import com.segator.scaleway.api.entity.ScalewayServerActionsResponse;
+import com.segator.scaleway.api.entity.ScalewayServerDefinition;
 import com.segator.scaleway.api.entity.ScalewayServerInstance;
 import com.segator.scaleway.api.entity.ScalewayServerTask;
 import com.segator.scaleway.api.entity.ScalewayServerTaskResponse;
 import com.segator.scaleway.api.entity.ScalewayServersInstances;
 import com.segator.scaleway.api.entity.ScalewayState;
+import com.segator.scaleway.api.entity.ScalewayUser;
+import com.segator.scaleway.api.entity.ScalewayUserKey;
+import com.segator.scaleway.api.entity.ScalewayUserKeyDefinition;
+import com.segator.scaleway.api.entity.ScalewayUserKeyDefinitionResponse;
+import com.segator.scaleway.api.entity.ScalewayUserResponse;
 import com.segator.scaleway.api.entity.exceptions.ScalewayException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
@@ -67,7 +80,7 @@ public class ScalewayClient {
     }
 
     public ScalewayImage getImage(String imageId) throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, new StringBuilder("image/").append(imageId).toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, new StringBuilder("images/").append(imageId).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayImageResponse.class).getImage();
@@ -76,13 +89,19 @@ public class ScalewayClient {
         }
     }
 
-    public ScalewayServer createServer(String serverName, ScalewayImage scalewayImage, String... tag) throws ScalewayException {
-        ScalewayServerTemplate server = new ScalewayServerTemplate();
+    public ScalewayServer createBasicServer(String serverName, ScalewayImage scalewayImage, ScalewayCommercialType serverType, String... tag) throws ScalewayException {
+        ScalewayServerDefinition server = new ScalewayServerDefinition();
         server.setName(serverName);
-        server.setImage(scalewayImage);
+        server.setImage(scalewayImage.getId());
         server.setOrganization(organizationToken);
+        server.setDynamicIpRequired(true);
         server.setTags(Arrays.asList(tag));
+        server.setCommercialType(serverType);
         return createServer(server);
+    }
+
+    public void deleteServer(ScalewayServer server) throws ScalewayException {
+        deleteServer(server.getId());
     }
 
     public void deleteServer(String serverID) throws ScalewayException {
@@ -97,9 +116,9 @@ public class ScalewayClient {
         }
     }
 
-    public ScalewayServer createServer(ScalewayServerTemplate serverRequest) throws ScalewayException {
+    public ScalewayServer createServer(ScalewayServerDefinition serverDefinition) throws ScalewayException {
         HttpPost request = (HttpPost) Utils.buildRequest("POST", ScalewayConstants.computeURL, "servers", accessToken);
-        setResponseObject(request, serverRequest);
+        setResponseObject(request, serverDefinition);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 201) {
             ScalewayServerInstance servers = parseResponse(response, ScalewayServerInstance.class);
@@ -140,6 +159,11 @@ public class ScalewayClient {
         }
     }
 
+    public ScalewayServerTask executeServerActionSync(ScalewayServer server, ScalewayServerAction action) throws ScalewayException, InterruptedException {
+        ScalewayServerTask task = executeServerAction(server, action);
+        return getTaskResult(task);
+    }
+
     public ScalewayServerTask executeServerAction(ScalewayServer server, ScalewayServerAction action) throws ScalewayException {
         return executeServerAction(server.getId(), action);
     }
@@ -172,7 +196,44 @@ public class ScalewayClient {
         }
     }
 
-    private void setResponseObject(HttpPost request, Object responseObject) throws ScalewayException {
+    public List<ScalewayOrganization> getAllOrganizations() throws ScalewayException {
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.accountURL, "organizations", accessToken);
+        HttpResponse response = executeRequest(request);
+        if (response.getStatusLine().getStatusCode() == 200) {
+            return parseResponse(response, ScalewayOrganizationsInstances.class).getOrganizations();
+        } else {
+            throw new ScalewayInvalidRequestException(response);
+        }
+    }
+
+    public ScalewayUser getUser(String userID) throws ScalewayException {
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.accountURL, new StringBuilder("users/").append(userID).toString(), accessToken);
+        HttpResponse response = executeRequest(request);
+        if (response.getStatusLine().getStatusCode() == 200) {
+            return parseResponse(response, ScalewayUserResponse.class).getUser();
+        } else {
+            throw new ScalewayInvalidRequestException(response);
+        }
+    }
+
+    public void addSSHKey(String userID, ScalewayUserKeyDefinition userKeyDefinition) throws ScalewayException {
+        Set sshKeys = new HashSet(getUser(userID).getSshPublicKeys());
+        sshKeys.add(userKeyDefinition);
+        ScalewayUserKeyDefinitionResponse keyDefinitions = new ScalewayUserKeyDefinitionResponse();
+        keyDefinitions.setSshPublicKeys(new ArrayList<ScalewayUserKeyDefinition>(sshKeys));
+        modifySSHKeys(userID, keyDefinitions);
+    }
+
+    public void modifySSHKeys(String userID, ScalewayUserKeyDefinitionResponse userKeysDefinition) throws ScalewayException {
+        HttpPatch request = (HttpPatch) Utils.buildRequest("PATCH", ScalewayConstants.accountURL, new StringBuilder("users/").append(userID).toString(), accessToken);
+        setResponseObject(request, userKeysDefinition);
+        HttpResponse response = executeRequest(request);
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new ScalewayInvalidRequestException(response);
+        }
+    }
+
+    private void setResponseObject(HttpEntityEnclosingRequestBase request, Object responseObject) throws ScalewayException {
         try {
             request.setEntity(new StringEntity(Utils.formatJson(responseObject), "UTF-8"));
         } catch (JsonProcessingException ex) {

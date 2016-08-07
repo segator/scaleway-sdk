@@ -15,13 +15,8 @@ import java.util.Date;
  */
 public class ScalewayServer extends ScalewayServerTemplate {
 
-    private BootScript bootscript;
-    @JsonProperty("dynamic_ip_required")
-    private boolean dynamicIpRequired;
     private String id;
 
-    @JsonProperty("public_ip")
-    private ScalewayIP publicIp;
     @JsonProperty("private_ip")
     private String privateIp;
 
@@ -40,12 +35,8 @@ public class ScalewayServer extends ScalewayServerTemplate {
     private Date creationDate;
     private ScalewayLocation location;
     private String ipv6;
-    @JsonProperty("enable_ipv6")
-    private boolean ipv6Enabled;
-    @JsonProperty("commercial_type")
-    private ScalewayCommercialType commercialType;
-    @JsonProperty("security_group")
-    private ScalewaySecurityGroup securityGroup;
+    public ScalewayImage image;
+
     private String hostname;
 
     public String getHostname() {
@@ -56,36 +47,20 @@ public class ScalewayServer extends ScalewayServerTemplate {
         this.hostname = hostname;
     }
 
-    public BootScript getBootscript() {
-        return bootscript;
-    }
-
-    public void setBootscript(BootScript bootscript) {
-        this.bootscript = bootscript;
-    }
-
-    public boolean isDynamicIpRequired() {
-        return dynamicIpRequired;
-    }
-
-    public void setDynamicIpRequired(boolean dynamicIpRequired) {
-        this.dynamicIpRequired = dynamicIpRequired;
-    }
-
-    public boolean isIpv6Enabled() {
-        return ipv6Enabled;
-    }
-
-    public void setIpv6Enabled(boolean ipv6Enabled) {
-        this.ipv6Enabled = ipv6Enabled;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ScalewayImage getImage() {
+        return image;
+    }
+
+    public void setImage(ScalewayImage image) {
+        this.image = image;
     }
 
     public Date getModificationDate() {
@@ -102,14 +77,6 @@ public class ScalewayServer extends ScalewayServerTemplate {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public ScalewayIP getPublicIp() {
-        return publicIp;
-    }
-
-    public void setPublicIp(ScalewayIP publicIp) {
-        this.publicIp = publicIp;
     }
 
     public String getPrivateIp() {
@@ -150,22 +117,6 @@ public class ScalewayServer extends ScalewayServerTemplate {
 
     public void setIpv6(String ipv6) {
         this.ipv6 = ipv6;
-    }
-
-    public ScalewayCommercialType getCommercialType() {
-        return commercialType;
-    }
-
-    public void setCommercialType(ScalewayCommercialType commercialType) {
-        this.commercialType = commercialType;
-    }
-
-    public ScalewaySecurityGroup getSecurityGroup() {
-        return securityGroup;
-    }
-
-    public void setSecurityGroup(ScalewaySecurityGroup securityGroup) {
-        this.securityGroup = securityGroup;
     }
 
     public String getArch() {

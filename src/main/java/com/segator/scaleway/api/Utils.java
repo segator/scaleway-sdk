@@ -5,6 +5,8 @@
  */
 package com.segator.scaleway.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 
@@ -23,12 +26,12 @@ import org.apache.http.client.methods.HttpRequestBase;
  * @author isaac_000
  */
 public class Utils {
- public static HttpRequestBase buildRequest(String type, String typeUrl, String method, String accessToken) {
+
+    public static HttpRequestBase buildRequest(String type, String typeUrl, String method, String accessToken) {
         String requestPath = new StringBuilder(typeUrl).append("/").append(method).toString();
         return buildRequest(type, requestPath, accessToken);
- }
-    
-    
+    }
+
     public static HttpRequestBase buildRequest(String type, String requestPath, String accessToken) {
         HttpRequestBase request = null;
         switch (type) {
@@ -40,6 +43,9 @@ public class Utils {
                 break;
             case "DELETE":
                 request = new HttpDelete(requestPath);
+                break;
+            case "PATCH":
+                request = new HttpPatch(requestPath);
                 break;
         }
         request.setHeader(ScalewayConstants.HEADER_AUTH_TOKEN, accessToken);
@@ -71,6 +77,5 @@ public class Utils {
     public static String formatJson(Object entity) throws JsonProcessingException {
         return initializeObjectMapperJson().writeValueAsString(entity);
     }
-    
-    
+
 }

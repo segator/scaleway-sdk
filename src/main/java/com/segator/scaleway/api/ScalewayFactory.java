@@ -5,6 +5,7 @@
  */
 package com.segator.scaleway.api;
 
+
 /**
  *
  * @author isaac_000
@@ -13,5 +14,5 @@ public class ScalewayFactory {
 
     public static ScalewayClient getScalewayClient(String accessToken, String organizationToken) {
         return new ScalewayClient(accessToken, organizationToken);
-    }
+    }   
 }

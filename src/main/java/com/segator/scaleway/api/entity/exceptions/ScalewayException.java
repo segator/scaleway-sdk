@@ -23,6 +23,21 @@ public class ScalewayException extends Exception {
 
     }
 
+    @Override
+    public synchronized Throwable getCause() {
+        return parentException.getCause(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getLocalizedMessage() {
+        return parentException.getLocalizedMessage(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getMessage() {
+        return parentException.getMessage(); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public Exception getParentException() {
         return parentException;
     }

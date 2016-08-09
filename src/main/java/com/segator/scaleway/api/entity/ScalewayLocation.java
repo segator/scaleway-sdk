@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author isaac_000
  */
 public class ScalewayLocation {
+
     @JsonProperty("platform_id")
     private String platformID;
     @JsonProperty("hypervisor_id")
@@ -20,6 +21,8 @@ public class ScalewayLocation {
     private String nodeID;
     @JsonProperty("cluster_id")
     private String clusterID;
+    @JsonProperty("chassis_id")
+    private String chassisId;
 
     public String getPlatformID() {
         return platformID;
@@ -52,5 +55,12 @@ public class ScalewayLocation {
     public void setClusterID(String clusterID) {
         this.clusterID = clusterID;
     }
-    
+
+    public String getChassisId() {
+        return chassisId;
+    }
+
+    public void setChassisId(String chassisId) {
+        this.chassisId = chassisId;
+    }
 }

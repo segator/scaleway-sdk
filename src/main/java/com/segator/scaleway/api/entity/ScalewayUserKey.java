@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
  * @author isaac_000
  */
 public class ScalewayUserKey extends ScalewayUserKeyDefinition{
-
+    
     @JsonProperty(access = Access.WRITE_ONLY)
     private String fingerprint;
 

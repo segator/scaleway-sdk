@@ -15,6 +15,14 @@ public class ScalewayUserKeyDefinition {
 
     private String key;
 
+    public ScalewayUserKeyDefinition(String key) {
+        this.key = key;
+    }
+
+    public ScalewayUserKeyDefinition() {
+
+    }
+
     public String getKey() {
         return key;
     }

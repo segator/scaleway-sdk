@@ -61,7 +61,7 @@ public class ScalewayClient {
         this.accessToken = accessToken;
         this.organizationToken = organizationToken;
         HttpClientBuilder httpBuilder = HttpClients.custom();
-        httpBuilder.setUserAgent("scaleway/java-sdk" + Manifests.read("Implementation-Version"));
+        httpBuilder.setUserAgent("scaleway/java-sdk");
         this.httpclient = httpBuilder.build();
     }
 
@@ -161,6 +161,10 @@ public class ScalewayClient {
 
     public ScalewayServerTask executeServerActionSync(ScalewayServer server, ScalewayServerAction action) throws ScalewayException, InterruptedException {
         ScalewayServerTask task = executeServerAction(server, action);
+        return getTaskResult(task);
+    }
+    public ScalewayServerTask executeServerActionSync(String serverId, ScalewayServerAction action) throws ScalewayException, InterruptedException {
+        ScalewayServerTask task = executeServerAction(serverId, action);
         return getTaskResult(task);
     }
 

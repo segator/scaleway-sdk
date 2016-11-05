@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.segator</groupId>
+    <groupId>org.segator</groupId>
     <artifactId>scaleway-api</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/segator/scaleway-sdk</url>
     <description>Scaleway SDK for Java</description>
     <licenses>
         <license>
@@ -18,10 +18,17 @@
     <scm>
         <url>https://github.com/segator/scaleway-sdk</url>
     </scm>
+    <developers>
+		<developer>
+			<id>segator</id>
+			<name>Isaac Aymerich</name>
+			<email>isaac.aymerich@gmail.com</email>
+		</developer>
+	</developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -48,6 +55,20 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

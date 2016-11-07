@@ -1,6 +1,20 @@
 # scaleway-sdk
 Java SDK for Scaleway Cloud computing 
 
+# Status
+[![Build Status](https://travis-ci.org/segator/scaleway-sdk.svg?branch=master)](https://travis-ci.org/segator/scaleway-sdk)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**Maven dependency**
+```xml
+<dependency>
+    <groupId>com.github.segator</groupId>
+    <artifactId>scaleway-sdk</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
+```
+
+
 ```java
 //Create Client Instance
 ScalewayClient scaleClient = ScalewayFactory.getScalewayClient(accessKey, orgKey);

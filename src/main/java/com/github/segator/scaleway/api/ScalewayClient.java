@@ -7,7 +7,6 @@ package com.github.segator.scaleway.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.segator.scaleway.api.entity.exceptions.ScalewayInvalidRequestException;
-import com.jcabi.manifests.Manifests;
 import com.github.segator.scaleway.api.constants.ScalewayConstants;
 import com.github.segator.scaleway.api.entity.ScalewayCommercialType;
 import com.github.segator.scaleway.api.entity.ScalewayImage;
@@ -26,7 +25,6 @@ import com.github.segator.scaleway.api.entity.ScalewayServerTaskResponse;
 import com.github.segator.scaleway.api.entity.ScalewayServersInstances;
 import com.github.segator.scaleway.api.entity.ScalewayState;
 import com.github.segator.scaleway.api.entity.ScalewayUser;
-import com.github.segator.scaleway.api.entity.ScalewayUserKey;
 import com.github.segator.scaleway.api.entity.ScalewayUserKeyDefinition;
 import com.github.segator.scaleway.api.entity.ScalewayUserKeyDefinitionResponse;
 import com.github.segator.scaleway.api.entity.ScalewayUserResponse;

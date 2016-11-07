@@ -4,6 +4,7 @@ Java SDK for Scaleway Cloud computing
 # Status
 [![Build Status](https://travis-ci.org/segator/scaleway-sdk.svg?branch=master)](https://travis-ci.org/segator/scaleway-sdk)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Code Coverage](https://codecov.io/gh/segator/scaleway-sdk/coverage.svg?branch=master)](https://codecov.io/gh/segator/scaleway-sdk)
 
 **Maven dependency**
 ```xml

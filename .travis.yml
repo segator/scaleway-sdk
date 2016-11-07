@@ -1,11 +1,9 @@
 language: java
 jdk: oraclejdk7
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 cache:
   directories:
   - "$HOME/.m2"
 after_success:
-- mvn clean test -Dmaven.javadoc.skip=true -B -V
 - bash <(curl -s https://codecov.io/bash)
 - openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in $DEPLOY_DIR/pubring.gpg.enc
   -out $DEPLOY_DIR/pubring.gpg -d

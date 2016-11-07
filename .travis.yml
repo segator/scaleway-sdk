@@ -1,20 +1,20 @@
 language: java
-jdk: openjdk7
-branches: 
-only:
-- master
+jdk: oraclejdk7
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 cache:
   directories:
   - "$HOME/.m2"
 after_success:
-- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in $GPG_DIR/pubring.gpg.enc
-  -out $GPG_DIR/pubring.gpg -d
-- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in $GPG_DIR/secring.gpg.enc
-  -out $GPG_DIR/secring.gpg -d
-- "$GPG_DIR/publish.sh"
+- mvn clean test -Dmaven.javadoc.skip=true -B -V
+- bash <(curl -s https://codecov.io/bash)
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in $DEPLOY_DIR/pubring.gpg.enc
+  -out $DEPLOY_DIR/pubring.gpg -d
+- openssl aes-256-cbc -pass pass:$ENCRYPTION_PASSWORD -in $DEPLOY_DIR/secring.gpg.enc
+  -out $DEPLOY_DIR/secring.gpg -d
+- "$DEPLOY_DIR/publish.sh"
 env:
   global:
-  - GPG_DIR="`pwd`/deploy"
+  - DEPLOY_DIR="`pwd`/deploy"
   - secure: oTxaMd2ZQdt33pqvBqkpbAIfFSBLp151hlNnkWTrPGd2SToUGCTQD8h+SewNQeCJLZ+RYHNWAfxqzm0q1BnacShorLWq30D4QG9/kb1GhdDLT1N989aggO346IVAGmV7fX2x7KWICYLvBDdTMHFIHQql4NnHWKplZkyqpK2NeVsIH0jKDgsRMXHppbiv7I8N6b/39JRyvN2PfL+NOCu5Bi2n9RHDhAh/pStpKBXdcn5fPDj8+PQ9WqsRzD39uJ3YQj+HMjZalkTto1USlzq2DD97sdi0samdYhp7z733MdlWmM/MzX/PqWblIZuIL3OLAT9/cm5vXFh0DxxVeFB8ivDTeU02w8jJLXIHfyVrg5sL1Z00SsikK0zYQiFTtjDTrrxcVlh8zmeuafRDuT1+6i6kYIb21iUGrytvI1IqGhrMXk52H3a7ImXlYp5+lzOsU7zIxC1nYyQWIhpg8YwdfLMd0M+9DUStjRHuoYw9SzDSbxHV7B/a8CtITAADTq617o03TejDRmug8U89xeX6soHhb/kYxynbBbh41VvQQIZK8KSBtuGOKbw/hYe77xf4bazPEKvncMaad40awM0Ofx1ciLgCSfQpekLGn9+SxJKCra2R3P/uhKCEBTrSbZ6JCP43CbJEvfGqkWhLaJV8f0aktMZZHx8gUZ9s9aDVTO8=
   - secure: k9KsbZVJtXkUIJ1L2oTBPOzGwgQyyKje+u1yzRgWXMf4dKzBkU/k9nvjuyldhXhnRbz0Gk4L+p3t9h/M/Rmi9Hdz/hnLuJd3ubb4ao2YL0y5g1MGLdezldywM4mtZ2GOVW6MKBCEnFEBrSYnhbgNSYPI17g3hWI8TqXCV8CUyM1AnxHyZtN2CrpGSVPzG9dfiQuFPrgNmYIzCCcPC8c1pvVlOskU+SBGKU3l54mP+152kMpmTpZ+JjVybQG4OlAl0s2JeVd9l/QIUPeAzJlRMYCdJDYaxQnRcqSDM1uuZyuw5FiVV+FyDYVkR5pDnPCKyp4FYWxx8bMNr91xTZQhO/MmGVLHOoRiOGSnqssdgOcqdFQGPDyOjfbT6MMju+uyruRZDwjpDajC4N8zDsn/EMcUvTm385WpY0udb9w46SYyIjuSgVYexgwSbLl5RbxxCEv63s5eoI0tR7HAVaFsVeMOqkT9jOmlPzb9PFH/cNWooE737q8Y5uIFSpf27tEQIVCnfEe+5GsqDVWmDfGNo2C/OxjF20oxTu5NF5gdZcmc5WsPXiS3E0zoBjiriv+yw3fBSYP3oB7psYUKduwxgQYcn0D0AcJTN1YC0/q7OFHLkDYkyL1f/3FVMa1m5jS6Zqi0NtdgMlXMRh0oSXeyj+8SbO4zmYOIwOk6wuAolzk=
   - secure: E84k411/vcSK2K9Jcsg4ekkAboYsOX7Ul3fs6t4Hc7pSq2QbMmQK9fc4VzMXdJah4jkTmFvmP4yNFXGwGoYUxSz9ude+vPVoRWhyiJUFclU/MXUdZp9NT6XtfEq6DR3KdCVVxrPvpysuXPp5JVVK/C7pwa9iFzrBvnukMH+8hlPWURnUC9BsHYfvVOYhHl/w+q2wPJffpXJpAzNIAL06XyAF9ktGM5M5bS6PAtKBD6+eA6Ecg3bbIsP1CqOd3IYMd4phkOoA1L3CtKiJyOeJ/MyDT9QppIIlynp7eUC9euHueMksjBAJW0e9AdUbvlqVxYQqjYB3XjbwD61+Dl2279tZUSWi6WVPtq0hc81R4oRYJbSk/85kyriwlxoibYjBuEmBjV9Q381AodyJU3NtMNi3+ObkfSkzSQoeu8KBRBbZ+nqe4DwnN6Ur8ddsCZg2/8HtehtiW3bipTLLSlIRW7o+vxbu9vlgbUZsZOagHEGgMaW32KY35TmLv9SOjH/76SmvCgnbT+vHY9+naOh1aDTegjM+pvlIV3jmUNBlbkIRe41A+zL73haxN0HEnO30WHr5GOt9HdbCYoqtaBJqVlP1IJ5NVb/dpz6/ypGIkKQr4WHB/Q/FlypXOLfQ6aQ0fWtH46FqTm2DgaBgn2DA53CoFNp0RDlPGBf1l+CXWFQ=

@@ -1,6 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-if [[ $TRAVIS_PULL_REQUEST == "false" ]]; then
-    mvn deploy --settings $GPG_DIR/settings.xml -DperformRelease=true -DskipTests=true
-    exit $?
+set -e
+
+if [ ! -z "$TRAVIS_TAG" ]
+then
+    echo "Git tag detected - set Maven POM version to [$TRAVIS_TAG]"
+    mvn versions:set -DnewVersion=$TRAVIS_TAG --settings $DEPLOY_DIR/settings.xml
+else
+    echo "No Git tag detected - keep Maven POM version untouched"
 fi
+
+mvn clean deploy -P bundle,ossrh --settings $DEPLOY_DIR/settings.xml -B -U

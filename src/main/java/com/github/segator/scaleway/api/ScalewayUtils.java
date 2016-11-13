@@ -21,22 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.segator.scaleway.api.entity;
+package com.github.segator.scaleway.api;
+
+import com.github.segator.scaleway.api.constants.ScalewayComputeRegion;
+import com.github.segator.scaleway.api.constants.ScalewayConstants;
 
 /**
  *
  * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
-public class ScalewayServerTaskResponse {
-    private ScalewayServerTask task;
-
-    public ScalewayServerTask getTask() {
-        return task;
+public class ScalewayUtils {
+        public static String computeRegion(ScalewayComputeRegion region) {
+        return ScalewayConstants.COMPUTE_URL.replace("{region}", region.region);
     }
-
-    public void setTask(ScalewayServerTask task) {
-        this.task = task;
-    }
-    
-    
 }

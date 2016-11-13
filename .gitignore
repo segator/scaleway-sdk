@@ -2,3 +2,4 @@
 .project
 .settings/
 target/
+src/main/java/com/github/segator/scaleway/api/NewMain.java

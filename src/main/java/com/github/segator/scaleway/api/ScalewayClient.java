@@ -1,13 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2016 Isaac Aymerich <isaac.aymerich@gmail.com>.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.github.segator.scaleway.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.segator.scaleway.api.entity.exceptions.ScalewayInvalidRequestException;
 import com.github.segator.scaleway.api.constants.ScalewayConstants;
+import com.github.segator.scaleway.api.constants.ScalewayComputeRegion;
 import com.github.segator.scaleway.api.entity.ScalewayCommercialType;
 import com.github.segator.scaleway.api.entity.ScalewayImage;
 import com.github.segator.scaleway.api.entity.ScalewayImageResponse;
@@ -47,24 +66,26 @@ import org.apache.http.impl.client.HttpClients;
 
 /**
  *
- * @author isaac_000
+ * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
 public class ScalewayClient {
 
     private final String accessToken;
     private final String organizationToken;
+    private final ScalewayComputeRegion region;
     private CloseableHttpClient httpclient = null;
 
-    public ScalewayClient(String accessToken, String organizationToken) {
+    public ScalewayClient(String accessToken, String organizationToken, ScalewayComputeRegion region) {
         this.accessToken = accessToken;
         this.organizationToken = organizationToken;
+        this.region = region;
         HttpClientBuilder httpBuilder = HttpClients.custom();
-        httpBuilder.setUserAgent("scaleway/java-sdk");
+        httpBuilder.setUserAgent(ScalewayConstants.USER_AGENT);
         this.httpclient = httpBuilder.build();
     }
 
     public List<ScalewayImage> getAllImages() throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, "images", accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), "images", accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayImagesResponse.class).getImages();
@@ -78,7 +99,7 @@ public class ScalewayClient {
     }
 
     public ScalewayImage getImage(String imageId) throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, new StringBuilder("images/").append(imageId).toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), new StringBuilder("images/").append(imageId).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayImageResponse.class).getImage();
@@ -107,7 +128,7 @@ public class ScalewayClient {
         if (serverToDelete.getState() != ScalewayState.STOPPED) {
 
         }
-        HttpRequestBase request = Utils.buildRequest("DELETE", ScalewayConstants.computeURL, new StringBuilder("servers/").append(serverID).toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("DELETE", ScalewayUtils.computeRegion(region), new StringBuilder("servers/").append(serverID).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() != 204) {
             throw new ScalewayInvalidRequestException(response);
@@ -115,7 +136,7 @@ public class ScalewayClient {
     }
 
     public ScalewayServer createServer(ScalewayServerDefinition serverDefinition) throws ScalewayException {
-        HttpPost request = (HttpPost) Utils.buildRequest("POST", ScalewayConstants.computeURL, "servers", accessToken);
+        HttpPost request = (HttpPost) Utils.buildRequest("POST", ScalewayUtils.computeRegion(region), "servers", accessToken);
         setResponseObject(request, serverDefinition);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 201) {
@@ -128,7 +149,7 @@ public class ScalewayClient {
     }
 
     public List<ScalewayServer> getAllServers() throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, "servers", accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), "servers", accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayServersInstances.class).getServers();
@@ -138,7 +159,7 @@ public class ScalewayClient {
     }
 
     public ScalewayServer getServer(String serverID) throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, new StringBuilder("servers/").append(serverID).toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), new StringBuilder("servers/").append(serverID).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayServerInstance.class).getServer();
@@ -148,7 +169,7 @@ public class ScalewayClient {
     }
 
     public List<ScalewayServerAction> getServerActions(String serverID) throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, new StringBuilder("servers/").append(serverID).append("/action").toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), new StringBuilder("servers/").append(serverID).append("/action").toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayServerActionsResponse.class).getActions();
@@ -161,6 +182,7 @@ public class ScalewayClient {
         ScalewayServerTask task = executeServerAction(server, action);
         return getTaskResult(task);
     }
+
     public ScalewayServerTask executeServerActionSync(String serverId, ScalewayServerAction action) throws ScalewayException, InterruptedException {
         ScalewayServerTask task = executeServerAction(serverId, action);
         return getTaskResult(task);
@@ -171,7 +193,7 @@ public class ScalewayClient {
     }
 
     public ScalewayServerTask executeServerAction(String serverID, ScalewayServerAction action) throws ScalewayException {
-        HttpPost request = (HttpPost) Utils.buildRequest("POST", ScalewayConstants.computeURL, new StringBuilder("servers/").append(serverID).append("/action").toString(), accessToken);
+        HttpPost request = (HttpPost) Utils.buildRequest("POST", ScalewayUtils.computeRegion(region), new StringBuilder("servers/").append(serverID).append("/action").toString(), accessToken);
         ScalewayServerActionRequest serverActionRequest = new ScalewayServerActionRequest();
         serverActionRequest.setAction(action);
         setResponseObject(request, serverActionRequest);
@@ -189,7 +211,7 @@ public class ScalewayClient {
     }
 
     public ScalewayServerTask getTaskStatus(String taskID) throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.computeURL, new StringBuilder("tasks/").append(taskID).toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), new StringBuilder("tasks/").append(taskID).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayServerTaskResponse.class).getTask();
@@ -199,7 +221,7 @@ public class ScalewayClient {
     }
 
     public List<ScalewayOrganization> getAllOrganizations() throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.accountURL, "organizations", accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.ACCOUNT_URL, "organizations", accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayOrganizationsInstances.class).getOrganizations();
@@ -209,7 +231,7 @@ public class ScalewayClient {
     }
 
     public ScalewayUser getUser(String userID) throws ScalewayException {
-        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.accountURL, new StringBuilder("users/").append(userID).toString(), accessToken);
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayConstants.ACCOUNT_URL, new StringBuilder("users/").append(userID).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() == 200) {
             return parseResponse(response, ScalewayUserResponse.class).getUser();
@@ -227,7 +249,7 @@ public class ScalewayClient {
     }
 
     public void modifySSHKeys(String userID, ScalewayUserKeyDefinitionResponse userKeysDefinition) throws ScalewayException {
-        HttpPatch request = (HttpPatch) Utils.buildRequest("PATCH", ScalewayConstants.accountURL, new StringBuilder("users/").append(userID).toString(), accessToken);
+        HttpPatch request = (HttpPatch) Utils.buildRequest("PATCH", ScalewayConstants.ACCOUNT_URL, new StringBuilder("users/").append(userID).toString(), accessToken);
         setResponseObject(request, userKeysDefinition);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() != 200) {

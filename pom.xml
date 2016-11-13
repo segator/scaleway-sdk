@@ -16,7 +16,10 @@
         </license>
     </licenses>
     <scm>
+        <connection>scm:git:ssh://github.com/segator/scaleway-sdk.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/segator/scaleway-sdk.git</developerConnection>
         <url>https://github.com/segator/scaleway-sdk</url>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>

@@ -84,6 +84,10 @@ public class ScalewayClient {
         this.httpclient = httpBuilder.build();
     }
 
+    public ScalewayComputeRegion getRegion() {
+        return region;
+    }
+
     public List<ScalewayImage> getAllImages() throws ScalewayException {
         HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), "images", accessToken);
         HttpResponse response = executeRequest(request);

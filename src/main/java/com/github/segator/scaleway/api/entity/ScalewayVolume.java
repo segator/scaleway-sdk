@@ -43,7 +43,8 @@ public class ScalewayVolume {
     @JsonProperty("volume_type")
     private ScalewayVolumeType volumeType;
 
-    private String size;
+    @JsonProperty("size")
+    private long size;
     private String organization;
     @JsonProperty("export_uri")
     private String exportUri;
@@ -54,6 +55,8 @@ public class ScalewayVolume {
     @JsonProperty("creation_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
     private Date creationDate;
+    @JsonProperty("state")
+    private ScalewayVolumeState volumeState;
     
     private ScalewayServer server;
 
@@ -108,11 +111,11 @@ public class ScalewayVolume {
         this.creationDate = creationDate;
     }
 
-    public String getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(long size) {
         this.size = size;
     }
 

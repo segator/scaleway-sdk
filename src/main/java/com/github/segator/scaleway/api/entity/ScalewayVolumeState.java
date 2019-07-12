@@ -21,21 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.github.segator.scaleway.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
- * @author Isaac Aymerich <isaac.aymerich@gmail.com>
+ * @author Lionel Hubaut <hubaut.lionel@gmail.com>
  */
-public enum ScalewayState {
-    @JsonProperty("running")
-    RUNNING,
-    @JsonProperty("stopped")
-    STOPPED,
-    @JsonProperty("stopping")
-    STOPPING,
-    @JsonProperty("starting")
-    STARTING;
+
+public enum ScalewayVolumeState {
+    @JsonProperty("available")
+    AVAILABLE,
+    @JsonProperty("snapshotting")
+    SNAPSHOTTING,
+    @JsonProperty("error")
+    ERROR;
 }

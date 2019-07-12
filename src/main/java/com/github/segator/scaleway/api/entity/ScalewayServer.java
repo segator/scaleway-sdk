@@ -40,7 +40,8 @@ public class ScalewayServer extends ScalewayServerTemplate {
 
     @JsonProperty("extra_networks")
     private String[] extraNetworks;
-    private ScalewayState state;
+    @JsonProperty("state")
+    private ScalewayServerState state;
     private String arch;
     @JsonProperty("state_detail")
     public String stateDetail;
@@ -52,7 +53,8 @@ public class ScalewayServer extends ScalewayServerTemplate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSX")
     private Date creationDate;
     private ScalewayLocation location;
-    private String ipv6;
+    @JsonProperty("ipv6")
+    private ScalewayIPv6 ipv6;
     public ScalewayImage image;
 
     private String hostname;
@@ -105,14 +107,6 @@ public class ScalewayServer extends ScalewayServerTemplate {
         this.privateIp = privateIp;
     }
 
-    public ScalewayState getState() {
-        return state;
-    }
-
-    public void setState(ScalewayState state) {
-        this.state = state;
-    }
-
     public String getStateDetail() {
         return stateDetail;
     }
@@ -129,11 +123,11 @@ public class ScalewayServer extends ScalewayServerTemplate {
         this.location = location;
     }
 
-    public String getIpv6() {
+    public ScalewayIPv6 getIpv6() {
         return ipv6;
     }
 
-    public void setIpv6(String ipv6) {
+    public void setIpv6(ScalewayIPv6 ipv6) {
         this.ipv6 = ipv6;
     }
 
@@ -153,4 +147,11 @@ public class ScalewayServer extends ScalewayServerTemplate {
         this.extraNetworks = extraNetworks;
     }
 
+    public ScalewayServerState getState() {
+        return state;
+    }
+
+    public void setState(ScalewayServerState state) {
+        this.state = state;
+    }
 }

@@ -42,7 +42,7 @@ import com.github.segator.scaleway.api.entity.ScalewayServerInstance;
 import com.github.segator.scaleway.api.entity.ScalewayServerTask;
 import com.github.segator.scaleway.api.entity.ScalewayServerTaskResponse;
 import com.github.segator.scaleway.api.entity.ScalewayServersInstances;
-import com.github.segator.scaleway.api.entity.ScalewayState;
+import com.github.segator.scaleway.api.entity.ScalewayServerState;
 import com.github.segator.scaleway.api.entity.ScalewayUser;
 import com.github.segator.scaleway.api.entity.ScalewayUserKeyDefinition;
 import com.github.segator.scaleway.api.entity.ScalewayUserKeyDefinitionResponse;
@@ -129,7 +129,7 @@ public class ScalewayClient {
 
     public void deleteServer(String serverID) throws ScalewayException {
         ScalewayServer serverToDelete = getServer(serverID);
-        if (serverToDelete.getState() != ScalewayState.STOPPED) {
+        if (serverToDelete.getState() != ScalewayServerState.STOPPED) {
 
         }
         HttpRequestBase request = Utils.buildRequest("DELETE", ScalewayUtils.computeRegion(region), new StringBuilder("servers/").append(serverID).toString(), accessToken);

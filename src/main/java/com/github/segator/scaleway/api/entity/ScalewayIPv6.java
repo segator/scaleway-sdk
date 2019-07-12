@@ -27,17 +27,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
- * @author Isaac Aymerich <isaac.aymerich@gmail.com>
+ * @author Lionel Hubaut <hubaut.lionel@gmail.com>
  */
-public enum ScalewayServerTaskStatus {
-    @JsonProperty("pending")
-    PENDING,
-    @JsonProperty("started")
-    STARTED,
-    @JsonProperty("success")
-    SUCCESS,
-    @JsonProperty("failure")
-    FAILURE,
-    @JsonProperty("retry")
-    RETRY;
+
+public class ScalewayIPv6 {
+    @JsonProperty("netmask")
+    private String netmask;
+    @JsonProperty("gateway")
+    private String gateway;
+    @JsonProperty("address")
+    private String address;
+
+    public String getNetmask() {
+        return netmask;
+    }
+
+    public void setNetmask(String netmask) {
+        this.netmask = netmask;
+    }
+
+    public String getGateway() {
+        return gateway;
+    }
+
+    public void setGateway(String gateway) {
+        this.gateway = gateway;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

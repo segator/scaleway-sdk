@@ -29,15 +29,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
-public enum ScalewayServerTaskStatus {
-    @JsonProperty("pending")
-    PENDING,
-    @JsonProperty("started")
-    STARTED,
-    @JsonProperty("success")
-    SUCCESS,
-    @JsonProperty("failure")
-    FAILURE,
-    @JsonProperty("retry")
-    RETRY;
+public enum ScalewayServerState {
+    @JsonProperty("running")
+    RUNNING,
+    @JsonProperty("stopped")
+    STOPPED,
+    @JsonProperty("stopped in place")
+    STOPPED_IN_PLACE,
+    @JsonProperty("stopping")
+    STOPPING,
+    @JsonProperty("starting")
+    STARTING,
+    @JsonProperty("locked")
+    LOCKED;
 }

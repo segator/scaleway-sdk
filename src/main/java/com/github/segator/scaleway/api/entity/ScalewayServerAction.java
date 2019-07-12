@@ -37,5 +37,9 @@ public enum ScalewayServerAction {
     @JsonProperty("reboot")
     REBOOT,
     @JsonProperty("terminate")
-    TERMINATE;
+    TERMINATE,
+    @JsonProperty("backup")
+    BACKUP,
+    @JsonProperty("stop_in_place")
+    STOP_IN_PLACE;
 }

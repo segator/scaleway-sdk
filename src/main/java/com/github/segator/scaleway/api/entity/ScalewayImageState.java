@@ -23,21 +23,24 @@
  */
 package com.github.segator.scaleway.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
- * @author Isaac Aymerich <isaac.aymerich@gmail.com>
+ * @author Lionel Hubaut <hubaut.lionel@gmail.com>
  */
-public enum ScalewayServerTaskStatus {
-    @JsonProperty("pending")
-    PENDING,
-    @JsonProperty("started")
-    STARTED,
-    @JsonProperty("success")
-    SUCCESS,
-    @JsonProperty("failure")
-    FAILURE,
-    @JsonProperty("retry")
-    RETRY;
+@JsonSerialize
+public enum ScalewayImageState {
+    @JsonProperty("available")
+    AVAILABLE,
+    @JsonProperty("creating")
+    CREATING,
+    @JsonProperty("error")
+    ERROR;
 }

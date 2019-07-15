@@ -135,4 +135,11 @@ public class ScalewayVolume {
         this.exportUri = exportUri;
     }
 
+    public ScalewayVolumeState getVolumeState() {
+        return volumeState;
+    }
+
+    public void setVolumeState(ScalewayVolumeState volumeState) {
+        this.volumeState = volumeState;
+    }
 }

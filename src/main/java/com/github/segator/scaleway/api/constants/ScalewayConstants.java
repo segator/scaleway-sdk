@@ -28,8 +28,9 @@ package com.github.segator.scaleway.api.constants;
  * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
 public class ScalewayConstants {
+    public static final String API_VERSION = "v1";
     public static final String ACCOUNT_URL = "https://account.scaleway.com";
-    public static final String COMPUTE_URL = "https://cp-{region}.scaleway.com";
+    public static final String COMPUTE_URL = "https://api.scaleway.com/instance/" + API_VERSION +"/zones/{region}";
     
     public static final String HEADER_AUTH_TOKEN="X-Auth-Token";
     

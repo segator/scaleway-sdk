@@ -28,7 +28,7 @@ package com.github.segator.scaleway.api.constants;
  * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
 public enum ScalewayComputeRegion {
-    PARIS1("par1"),AMSTERDAM1("ams1");
+    PARIS1("fr-par-1"),AMSTERDAM1("nl-ams-1");
     public final String region;
     ScalewayComputeRegion(String region){
         this.region=region;        

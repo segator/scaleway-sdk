@@ -21,17 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.segator.scaleway.api.constants;
+package com.github.segator.scaleway.api.entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
- * @author Isaac Aymerich <isaac.aymerich@gmail.com>
+ * @author Lionel Hubaut <hubaut.lionel@gmail.com>
  */
-public enum ScalewayComputeRegion {
-    PARIS1("fr-par-1"),AMSTERDAM1("nl-ams-1");
-    public final String region;
-    ScalewayComputeRegion(String region){
-        this.region=region;        
-    }
-
+@JsonSerialize
+public enum ScalewayImageState {
+    @JsonProperty("available")
+    AVAILABLE,
+    @JsonProperty("creating")
+    CREATING,
+    @JsonProperty("error")
+    ERROR;
 }

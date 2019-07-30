@@ -32,10 +32,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public enum ScalewayServerTaskStatus {
     @JsonProperty("pending")
     PENDING,
-    @JsonProperty("running")
-    RUNNING,
     @JsonProperty("started")
     STARTED,
     @JsonProperty("success")
-    SUCCESS;
+    SUCCESS,
+    @JsonProperty("failure")
+    FAILURE,
+    @JsonProperty("retry")
+    RETRY;
 }

@@ -57,6 +57,9 @@ public class ScalewayImage {
     @JsonProperty("root_volume")
     private ScalewayVolume rootVolume;
 
+    @JsonProperty("state")
+    private ScalewayImageState state;
+
     private String name;
     @JsonProperty("extra_volumes")
     @JsonDeserialize(contentAs = ScalewayVolume.class)
@@ -180,9 +183,17 @@ public class ScalewayImage {
         this.marketplaceKey = marketplaceKey;
     }
 
+    public ScalewayImageState getState() {
+        return state;
+    }
+
+    public void setState(ScalewayImageState state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
-        return "ScalewayImage{" + "id=" + id + ", modificationDate=" + modificationDate + ", creationDate=" + creationDate + ", defaultbootscript=" + defaultbootscript + ", organization=" + organization + ", arch=" + arch + ", rootVolume=" + rootVolume + ", name=" + name + ", extraVolumes=" + extraVolumes + ", publicImage=" + publicImage + ", fromImage=" + fromImage + ", fromServer=" + fromServer + ", marketplaceKey=" + marketplaceKey + '}';
+        return "ScalewayImage{" + "id=" + id + ", modificationDate=" + modificationDate + ", creationDate=" + creationDate + ", defaultbootscript=" + defaultbootscript + ", organization=" + organization + ", arch=" + arch + ", rootVolume=" + rootVolume + ", state=" + state + ", name=" + name + ", extraVolumes=" + extraVolumes + ", publicImage=" + publicImage + ", fromImage=" + fromImage + ", fromServer=" + fromServer + ", marketplaceKey=" + marketplaceKey + '}';
     }
 
 }

@@ -25,21 +25,82 @@ package com.github.segator.scaleway.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 /**
  *
  * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
 public enum ScalewayCommercialType {
+    @JsonProperty("ARM64-128GB")
+    ARM64_128GB("arm64", false),
+    @JsonProperty("ARM64-64GB")
+    ARM64_64GB("arm64", false),
+    @JsonProperty("ARM64-32GB")
+    ARM64_32GB("arm64", false),
+    @JsonProperty("ARM64-16GB")
+    ARM64_16GB("arm64", false),
+    @JsonProperty("ARM64-8GB")
+    ARM64_8GB("arm64", false),
+    @JsonProperty("ARM64-4GB")
+    ARM64_4GB("arm64", false),
+    @JsonProperty("ARM64-2GB")
+    ARM64_2GB("arm64", false),
     @JsonProperty("VC1S")
-    VC1S,
+    VC1S("x86_64", false),
     @JsonProperty("VC1M")
-    VC1M,
+    VC1M("x86_64", false),
     @JsonProperty("VC1L")
-    VC1L,
+    VC1L("x86_64", false),
+    @JsonProperty("C1")
+    C1("arm", true),
     @JsonProperty("C2S")
-    C2S,
+    C2S("x86_64", true),
     @JsonProperty("C2M")
-    C2M,
+    C2M("x86_64", true),
     @JsonProperty("C2L")
-    C2L;
+    C2L("x86_64", true),
+    @JsonProperty("DEV1-XS")
+    DEV1_XS("x86_64", true),
+    @JsonProperty("DEV1-S")
+    DEV1_S("x86_64", true),
+    @JsonProperty("DEV1-M")
+    DEV1_M("x86_64", true),
+    @JsonProperty("DEV1-L")
+    DEV1_L("x86_64", true),
+    @JsonProperty("DEV1-XL")
+    DEV1_XL("x86_64", true),
+    @JsonProperty("GP1-XS")
+    GP1_XS("x86_64", true),
+    @JsonProperty("GP1-S")
+    GP1_S("x86_64", true),
+    @JsonProperty("GP1-M")
+    GP1_M("x86_64", true),
+    @JsonProperty("GP1-L")
+    GP1_L("x86_64", true),
+    @JsonProperty("GP1-XL")
+    GP1_XL("x86_64", true),
+    @JsonProperty("X64-120GB")
+    X64_120GB("x86_64", true),
+    @JsonProperty("X64-60GB")
+    X64_60GB("x86_64", true),
+    @JsonProperty("X64-30GB")
+    X64_30GB("x86_64", true),
+    @JsonProperty("X64-15GB")
+    X64_15GB("x86_64", true);
+
+    private String arch = "";
+    private boolean baremetal = false;
+
+    ScalewayCommercialType(String arch, boolean baremetal) {
+        this.arch = arch;
+        this.baremetal = baremetal;
+    }
+
+    public String getArch() {
+        return arch;
+    }
+
+    public boolean isBaremetal() {
+        return baremetal;
+    }
 }

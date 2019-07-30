@@ -36,6 +36,8 @@ public class ScalewayServerTask {
     private String description;
     @JsonProperty("href_from")
     private String hrefFrom;
+    @JsonProperty("href_result")
+    private String hrefResult;
     private String id;
     private String progress;
     private ScalewayServerTaskStatus status;
@@ -102,4 +104,11 @@ public class ScalewayServerTask {
         this.startedAt = startedAt;
     }
 
+    public String getHrefResult() {
+        return hrefResult;
+    }
+
+    public void setHrefResult(String hrefResult) {
+        this.hrefResult = hrefResult;
+    }
 }

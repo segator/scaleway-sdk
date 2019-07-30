@@ -24,6 +24,8 @@
 package com.github.segator.scaleway.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,17 @@ public class ScalewayServerTemplate {
     private ScalewayIP publicIp;
     @JsonProperty("security_group")
     private ScalewaySecurityGroup securityGroup;
+    @JsonProperty("allowed_actions")
+    private List<ScalewayServerAction> allowedActions;
+    @JsonProperty("maintenances")
+    private List<Date> maintenances;
+    @JsonProperty("boot_type")
+    private String bootType;
+    @JsonProperty("compute_cluster")
+    private ScalewayComputeCluster computeCluster;
+    @JsonProperty("protected")
+    private boolean _protected;
+
     private BootScript bootscript;
 
     public String getName() {
@@ -131,4 +144,43 @@ public class ScalewayServerTemplate {
         this.tags = tags;
     }
 
+    public List<ScalewayServerAction> getAllowedActions() {
+        return allowedActions;
+    }
+
+    public void setAllowedActions(List<ScalewayServerAction> allowedActions) {
+        this.allowedActions = allowedActions;
+    }
+
+    public List<Date> getMaintenances() {
+        return maintenances;
+    }
+
+    public void setMaintenances(List<Date> maintenances) {
+        this.maintenances = maintenances;
+    }
+
+    public String getBootType() {
+        return bootType;
+    }
+
+    public void setBootType(String bootType) {
+        this.bootType = bootType;
+    }
+
+    public ScalewayComputeCluster getComputeCluster() {
+        return computeCluster;
+    }
+
+    public void setComputeCluster(ScalewayComputeCluster computeCluster) {
+        this.computeCluster = computeCluster;
+    }
+
+    public boolean is_protected() {
+        return _protected;
+    }
+
+    public void set_protected(boolean _protected) {
+        this._protected = _protected;
+    }
 }

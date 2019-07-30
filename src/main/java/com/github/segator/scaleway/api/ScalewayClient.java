@@ -24,36 +24,14 @@
 package com.github.segator.scaleway.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.segator.scaleway.api.entity.*;
 import com.github.segator.scaleway.api.entity.exceptions.ScalewayInvalidRequestException;
 import com.github.segator.scaleway.api.constants.ScalewayConstants;
 import com.github.segator.scaleway.api.constants.ScalewayComputeRegion;
-import com.github.segator.scaleway.api.entity.ScalewayCommercialType;
-import com.github.segator.scaleway.api.entity.ScalewayImage;
-import com.github.segator.scaleway.api.entity.ScalewayImageResponse;
-import com.github.segator.scaleway.api.entity.ScalewayImagesResponse;
-import com.github.segator.scaleway.api.entity.ScalewayOrganization;
-import com.github.segator.scaleway.api.entity.ScalewayOrganizationsInstances;
-import com.github.segator.scaleway.api.entity.ScalewayServer;
-import com.github.segator.scaleway.api.entity.ScalewayServerAction;
-import com.github.segator.scaleway.api.entity.ScalewayServerActionRequest;
-import com.github.segator.scaleway.api.entity.ScalewayServerActionsResponse;
-import com.github.segator.scaleway.api.entity.ScalewayServerDefinition;
-import com.github.segator.scaleway.api.entity.ScalewayServerInstance;
-import com.github.segator.scaleway.api.entity.ScalewayServerTask;
-import com.github.segator.scaleway.api.entity.ScalewayServerTaskResponse;
-import com.github.segator.scaleway.api.entity.ScalewayServersInstances;
-import com.github.segator.scaleway.api.entity.ScalewayState;
-import com.github.segator.scaleway.api.entity.ScalewayUser;
-import com.github.segator.scaleway.api.entity.ScalewayUserKeyDefinition;
-import com.github.segator.scaleway.api.entity.ScalewayUserKeyDefinitionResponse;
-import com.github.segator.scaleway.api.entity.ScalewayUserResponse;
 import com.github.segator.scaleway.api.entity.exceptions.ScalewayException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpPatch;
@@ -123,19 +101,24 @@ public class ScalewayClient {
         return createServer(server);
     }
 
-    public void deleteServer(ScalewayServer server) throws ScalewayException {
+    public void deleteServer(ScalewayServer server) throws ScalewayException, InterruptedException {
         deleteServer(server.getId());
     }
 
-    public void deleteServer(String serverID) throws ScalewayException {
+    public void deleteServer(String serverID) throws ScalewayException, InterruptedException {
         ScalewayServer serverToDelete = getServer(serverID);
-        if (serverToDelete.getState() != ScalewayState.STOPPED) {
-
+        if (serverToDelete.getState() != ScalewayServerState.STOPPED) {
+            executeServerActionSync(serverToDelete, ScalewayServerAction.POWER_OFF);
         }
+
         HttpRequestBase request = Utils.buildRequest("DELETE", ScalewayUtils.computeRegion(region), new StringBuilder("servers/").append(serverID).toString(), accessToken);
         HttpResponse response = executeRequest(request);
         if (response.getStatusLine().getStatusCode() != 204) {
             throw new ScalewayInvalidRequestException(response);
+        }
+        // Deleting volumes attached to the server.
+        for(Map.Entry<String, ScalewayVolume> volEntry : serverToDelete.getVolumes().entrySet()){
+            deleteVolume(volEntry.getValue());
         }
     }
 
@@ -150,6 +133,33 @@ public class ScalewayClient {
             throw new ScalewayInvalidRequestException(response);
         }
 
+    }
+
+    public void deleteVolume(ScalewayVolume volume) throws ScalewayException {
+        deleteVolume(volume.getId());
+    }
+
+    public void deleteVolume(String volumeId) throws ScalewayException {
+        ScalewayVolume volumeToDelete = getVolume(volumeId);
+        if(volumeToDelete.getVolumeState() == ScalewayVolumeState.AVAILABLE ) {
+            HttpRequestBase request = Utils.buildRequest("DELETE", ScalewayUtils.computeRegion(region), new StringBuilder("volumes/").append(volumeId).toString(), accessToken);
+            HttpResponse response = executeRequest(request);
+            if (response.getStatusLine().getStatusCode() != 204) {
+                throw new ScalewayInvalidRequestException(response);
+            }
+        } else {
+            System.err.println("The volume you want to delete is not available...");
+        }
+    }
+
+    public ScalewayVolume getVolume(String volumeId) throws ScalewayException {
+        HttpRequestBase request = Utils.buildRequest("GET", ScalewayUtils.computeRegion(region), new StringBuilder("volumes/").append(volumeId).toString(), accessToken);
+        HttpResponse response = executeRequest(request);
+        if (response.getStatusLine().getStatusCode() == 200) {
+            return parseResponse(response, ScalewayVolumeResponse.class).getVolume();
+        } else {
+            throw new ScalewayInvalidRequestException(response);
+        }
     }
 
     public List<ScalewayServer> getAllServers() throws ScalewayException {

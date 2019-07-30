@@ -21,17 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.segator.scaleway.api.constants;
+package com.github.segator.scaleway.api.entity;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
  * @author Isaac Aymerich <isaac.aymerich@gmail.com>
  */
-public enum ScalewayComputeRegion {
-    PARIS1("fr-par-1"),AMSTERDAM1("nl-ams-1");
-    public final String region;
-    ScalewayComputeRegion(String region){
-        this.region=region;        
-    }
-
+public enum ScalewayServerState {
+    @JsonProperty("running")
+    RUNNING,
+    @JsonProperty("stopped")
+    STOPPED,
+    @JsonProperty("stopped in place")
+    STOPPED_IN_PLACE,
+    @JsonProperty("stopping")
+    STOPPING,
+    @JsonProperty("starting")
+    STARTING,
+    @JsonProperty("locked")
+    LOCKED;
 }
